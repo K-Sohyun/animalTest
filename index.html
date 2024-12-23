@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나는? 강아지? 고양이?</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div id="psyTestCon">
+        <div id="quizBox"></div>
+        <div id="btnBox">
+            <button type="button" id="yesBtn">Yes</button>
+            <button type="button" id="noBtn">No</button>
+            <button type="button" id="resetBtn">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "아침에 일찍 일어나는 편인가요?", dogPoints: 2, catPoints: 1 },
+            { question: "사람들과 함께 있는 걸 좋아하나요?", dogPoints: 3, catPoints: 0 },
+            { question: "혼자만의 시간이 필요한가요?", dogPoints: 0, catPoints: 3 },
+            { question: "활동적인 일을 선호하나요?", dogPoints: 2, catPoints: 1 },
+            { question: "낮잠 자는 걸 좋아하나요?", dogPoints: 1, catPoints: 2 },
+            { question: "익숙한 곳보다 새로운 곳이 더 설레나요?", dogPoints: 3, catPoints: 0 },
+            { question: "혼자 있을 때 외로움을 잘 타나요?", dogPoints: 3, catPoints: 1 },
+            { question: "사람들 사이에서 주목받는 걸 좋아하나요?", dogPoints: 3, catPoints: 1 },
+            { question: "누군가와 함께 다니는 걸 좋아하나요?", dogPoints: 3, catPoints: 0 },
+            { question: "시끌벅적한 공간보다 조용한 공간을 선호하나요?", dogPoints: 1, catPoints: 3 },
+        ];
+
+        let currentQuestionIndex = 0;
+        let dogScore = 0; // 강아지 점수
+        let catScore = 0; // 고양이 점수
+
+        const quizBox = document.getElementById("quizBox");
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        const resetBtn = document.getElementById("resetBtn");
+
+        // 질문 표시
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            quizBox.innerHTML = `<strong>${currentQuestion.question}</strong>`;
+            yesBtn.style.display = "inline-block";
+            noBtn.style.display = "inline-block";
+        }
+
+        // Yes 클릭 시
+        yesBtn.addEventListener("click", () => {
+            const currentQuestion = questions[currentQuestionIndex];
+            dogScore += currentQuestion.dogPoints; // 강아지 점수 추가
+            catScore += currentQuestion.catPoints; // 고양이 점수 추가
+            moveToNextQuestion();
+        });
+
+        // No 클릭 시 
+        noBtn.addEventListener("click", () => {
+            // No는 점수 추가 X
+            moveToNextQuestion();
+        });
+
+        // 다음 질문이동 또는 결과 출력
+        function moveToNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // 결과 출력
+        function showResult() {
+            yesBtn.style.display = "none";
+            noBtn.style.display = "none";
+
+            let resultMessage;
+            if (dogScore > catScore) {
+                resultMessage = `당신은 강아지 타입입니다! 🐶 (강아지 점수: ${dogScore}, 고양이 점수: ${catScore})`;
+            } else if (catScore > dogScore) {
+                resultMessage = `당신은 고양이 타입입니다! 🐱 (강아지 점수: ${dogScore}, 고양이 점수: ${catScore})`;
+            } else {
+                resultMessage = `당신은 강아지와 고양이의 중간 타입입니다! 🐾 (강아지 점수: ${dogScore}, 고양이 점수: ${catScore})`;
+            }
+
+            quizBox.innerHTML = `<strong>${resultMessage}</strong>`;
+            resetBtn.style.display = "block";
+        }
+
+        // 테스트 다시 시작
+        resetBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            dogScore = 0;
+            catScore = 0;
+            resetBtn.style.display = "none";
+            showQuestion();
+        });
+
+        // 첫 번째 질문 표시
+        showQuestion();
+    </script>
+</body>
+
+</html>
